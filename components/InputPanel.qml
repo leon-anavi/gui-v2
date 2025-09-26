@@ -77,6 +77,7 @@ QtVirtualKeyboard.InputPanel {
 				console.warn("onAboutToFocusTextField(): invalid item/container/flickable:", textField, textFieldContainer, flickable)
 				return
 			}
+
 			const inputPanelY = Global.mainView.height - root.height
 
 			// Find the bottom of the text field's container item (e.g. the ListTextField) within
@@ -89,23 +90,35 @@ QtVirtualKeyboard.InputPanel {
 			// field container.
 			const delta = toWinY - inputPanelY
 
+			console.log("DELTA: ", delta)
+
 			if (delta > 0) {
 				// Scroll the flickable upwards to show the item above the vkb.
 				root.toContentY = flickable.contentY + delta
 
 				if (flickable.contentY + delta + flickable.height > flickable.contentHeight) {
+					console.log("DELTA > 0 and IF")
 					// Item is too close to bottom of flickable, so it will still be hidden after
 					// scrolling upwards. Reduce the flickable height so that item can be seen.
 					root.toHeight = flickable.height - root.height
 				} else {
+					console.log("DELTA > 0 and ELSE")
 					// No flickable height changes required.
 					root.toHeight = flickable.height
 				}
 			} else {
+				console.log("DELTA =< 0")
 				// No position changes required, but PropertyChanges requires a valid target, so
 				// set the dest values to the current values.
 				root.toContentY = flickable.contentY
-				root.toHeight = flickable.height
+				// root.toHeight = flickable.height
+				root.toHeight = 0
+				console.log("root.height = ", root.height)
+				console.log("root.width = ", root.width)
+				console.log("flickable.contentY = ", flickable.contentY)
+				console.log("flickable.height = ", flickable.height)
+				console.log("flickable.width = ", flickable.width)
+				console.log("flickable.contentX = ", flickable.contentX)
 			}
 			root.focusedItem = textField
 			root.focusedFlickable = flickable
